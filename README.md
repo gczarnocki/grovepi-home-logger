@@ -13,11 +13,13 @@ Main purpose of this project is to log GrovePi sensor data into Apache Derby dat
 
 ## Krótki opis projektu
 
-Głównym celem tego projektu było zapisywanie danych zaczytanych z czytników pakietu GrovePi do bazy Apache Derby. Na projekt składają się następujące części:
-- Logger - skrypt napisany w Pythonie, czytający dane z czytników i zapisujący je do pliku .txt,
+Głównym celem tego projektu było zapisywanie danych zaczytanych z czytników pakietu GrovePi do bazy Apache Derby. 
+
+Na projekt składają się następujące części:
+- `Logger` - skrypt napisany w Pythonie, czytający dane z czytników i zapisujący je do pliku .txt,
   - po zakończeniu działania tego skryptu, wystawiany jest semafor o nazwie równej nazwie pliku .txt,
-- Watcher - skrypt Bashowy nasłuchujący na pojawienie się semafora i uruchamiający `Loader`,
-- Loader - aplikacja konsolowa napisana w Javie, ładuje dane z pliku .txt do bazy Apache Derby.
+- `Watcher` - skrypt Bashowy nasłuchujący na pojawienie się semafora i uruchamiający `Loader`,
+- `Loader` - aplikacja konsolowa napisana w Javie, ładuje dane z pliku .txt do bazy Apache Derby.
 
 ## Baza danych
 
@@ -39,7 +41,7 @@ SOUND | REAL
 PROXIMITY | REAL
 THRESHOLD | INTEGER
 
-## Logger mieszkaniowy - Logger
+## Logger
 
 Prosty logger, którego można użyć do logowania informacji z mieszkania pod naszą nieobecność. Korzystamy z następujących komponentów:
 - wyświetlacz LCD RGB, port I2C-1,
@@ -56,30 +58,29 @@ Prosty logger, którego można użyć do logowania informacji z mieszkania pod n
 ### Funkcjonalności:
 
 - zapis danych z czujników do pliku tekstowego (folder /logs),
-  - nazwa pliku: %y%m%d_%H%M%S.log
-- format linii: %s %.2f %.2f %.2f %.2f %.2f %d
-  - timestamp, temperatura, wilgotność, światło, dźwięk, odległość, threshold.
+  - nazwa pliku: `%y%m%d_%H%M%S.log`
+- format linii: `%s %.2f %.2f %.2f %.2f %.2f %d`
+  - `timestamp, temperatura, wilgotność, światło, dźwięk, odległość, threshold`.
 - zapis odbywa się co jedną sekundę,
 - przyciśnięcie przycisku przez dłużej niż sekundę powoduje zakończenie działania,
 - informacja dot. obecnie obliczonej odległości przedstawiona jest na wyświetlaczu,
 - ekran wyświetlacza podświetlony jest kolorem, którego poszczególne składowe to:
-  - R - odległość,
-  - G - poziom światła,
-  - B - poziom dźwięku,
+  - `R` - odległość,
+  - `G` - poziom światła,
+  - `B` - poziom dźwięku,
 - druga linia na ekranie zajęta jest przez wartość dot. alarmu dźwiękowego,
 - jeśli odległość jest większa niż ustawiona wartość alarmu, alarm podniesie się.
 
-Ponadto, skrypt po zakończeniu działania (po przyciśnięciu przycisku) wystawia plik semafora służący drugiemu skryptowi (tzw. watcher’owi) uruchomienie skryptu (loadera) służącego do pobrania danych z pliku tekstowego i wstawienie ich do bazy danych. Sugerowanym sposobem na zakończenie logowania jest przyciśnięcie przycisku (port D6). Wtedy tworzy się semafor.
+Ponadto, skrypt po zakończeniu działania (po przyciśnięciu przycisku) wystawia plik semafora służący drugiemu skryptowi (tzw. `watcher`’owi) uruchomienie skryptu (`loader'a`) służącego do pobrania danych z pliku tekstowego i wstawienie ich do bazy danych. Sugerowanym sposobem na zakończenie logowania jest przyciśnięcie przycisku (port `D6`). Wtedy tworzy się semafor.
 
 ## Watcher
 
 `Watcher` to prosty skrypt napisany w Bashu, który w pętli nasłuchuje na pojawienie się pliku o rozszerzeniu .sem w danym folderze. Po wykryciu takiego pliku, usuwa on semafor i przekazuje nazwę pliku do skryptu loadera, by wstawić rekordy do bazy danych. Parametry:
-- nasłuchiwanie na pliki o nazwie: <nazwa_pliku>.txt.sem,
+- nasłuchiwanie na pliki o nazwie: `<nazwa_pliku>.txt.sem`,
 - nasłuchiwanie działa w pętli nieskończonej,
 - ścieżka do folderu jest pierwszym argumentem skryptu,
 - uruchomienie: 
-  - ./watcher.sh <folder_z_logami>
-Plik znajduje się w lokalizacji: /home/pi/Desktop/_dev/Watcher.
+  - `./watcher.sh <folder_z_logami>`
 
 ## Loader
 
@@ -89,14 +90,12 @@ Jeżeli wciąż instancja bazy jest uruchomiona, należy ją zamknąć komendą:
 
 Jeżeli wciąż występuje błąd z połączeniem, można spróbować usunąć wszystkie procesy, które korzystają z Derby i jednocześnie usunąć wszystkie pliki `.lck` z folderu bazy danych.
 
-Uruchomienie programu: `java -jar Loader-1.0-SNAPSHOT.jar <nazwa_pliku>.log`
+Uruchomienie programu: `java -jar Loader-1.0-SNAPSHOT.jar <nazwa_pliku>.log` (należy go wcześniej zbudować, plik `pom.xml` znajduje się w repozytorium).
 
 ## W jaki sposób uruchomić skrypty?
 
-1. W tle uruchamiamy `Watcher`: 
-  -- `./watcher.sh <folder_z_logami>`
-2. Uruchamiamy w drugim terminalu Logger:
-  1. `sudo python Logger/logger.py`
+1. W tle uruchamiamy `Watcher`: `./watcher.sh <folder_z_logami>`
+2. Uruchamiamy w drugim terminalu Logger: `sudo python Logger/logger.py`
 3. Kończymy `Logger` - przyciskiem,
 4. Wykrycie semafora, uruchomienie `Loader'a` (automatycznie),
 5. `Loader` importuje dane do bazy danych,
@@ -106,16 +105,16 @@ Uruchomienie programu: `java -jar Loader-1.0-SNAPSHOT.jar <nazwa_pliku>.log`
 
 ### Uruchomienie​ urządzenia
 
-Raspberry Pi powinno mieć podłączoną do siebie nakładkę GrovePi. Podłączamy kabel microUSB do płytki (zielonej), kabel Ethernet do płytki i wolnego portu w routerze. Podłączamy kabel do gniazdka - powinny zaświecić się diody: PWR i ACT na Raspberry Pi i PWR na GrovePi. Jeśli tak, możemy przejść dalej.
+`Raspberry Pi` powinno mieć podłączoną do siebie nakładkę `GrovePi`. Podłączamy kabel microUSB do płytki (zielonej), kabel Ethernet do płytki i wolnego portu w routerze. Podłączamy kabel do gniazdka - powinny zaświecić się diody: `PWR` i `ACT` na Raspberry Pi i `PWR` na GrovePi. Jeśli tak, możemy przejść dalej.
 
 ### Podłączenie do płytki
 
 Możemy teraz podłączyć się do płytki przez dwa narzędzia:
-- PuTTY - tryb konsolowy,
-- VNC Viewer - tryb graficzny,
-- WinSCP - menadżer plików.
+- `PuTTY` - tryb konsolowy,
+- `VNC Viewer` - tryb graficzny,
+- `WinSCP` - menadżer plików.
 
-IP można znaleźć za pomocą programu Advanced Ip Scanner. Program ten służy do przeskanowania lokalnej sieci w poszukiwaniu urządzeń i nadanych im numerów IP.
+IP można znaleźć za pomocą programu `Advanced Ip Scanner`. Program ten służy do przeskanowania lokalnej sieci w poszukiwaniu urządzeń i nadanych im numerów IP.
 
 ###  Opisy najważniejszych metod, opis portów
 
