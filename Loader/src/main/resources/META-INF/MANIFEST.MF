@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Class-Path: derby-10.13.1.1.jar
+Main-Class: derby.Loader
+
