@@ -48,7 +48,7 @@ Prosty logger, którego można użyć do logowania informacji z mieszkania pod n
 - druga linia na ekranie zajęta jest przez wartość dot. alarmu dźwiękowego,
 - jeśli odległość jest większa niż ustawiona wartość alarmu, alarm podniesie się.
 
-Ponadto, skrypt po zakończeniu działania (po przyciśnięciu przycisku) wystawia plik semafora służący drugiemu skryptowi (tzw. `watcher`’owi) uruchomienie skryptu (`loader'a`) służącego do pobrania danych z pliku tekstowego i wstawienie ich do bazy danych. Sugerowanym sposobem na zakończenie logowania jest przyciśnięcie przycisku (port `D6`). Wtedy tworzy się semafor.
+Ponadto, skrypt po zakończeniu działania (po przyciśnięciu przycisku) wystawia plik semafora służący drugiemu skryptowi (tzw. `watcher’owi`) uruchomienie skryptu (`loader'a`) służącego do pobrania danych z pliku tekstowego i wstawienie ich do bazy danych. Sugerowanym sposobem na zakończenie logowania jest przyciśnięcie przycisku (port `D6`). Wtedy tworzy się semafor.
 
 ## Watcher
 
@@ -80,7 +80,7 @@ Uruchomienie programu: `java -jar Loader-1.0-SNAPSHOT.jar <nazwa_pliku>.log` (na
 
 ## Pozostałe informacje
 
-### Uruchomienie​ urządzenia
+### Uruchomienie urządzenia
 
 `Raspberry Pi` powinno mieć podłączoną do siebie nakładkę `GrovePi`. Podłączamy kabel microUSB do płytki (zielonej), kabel Ethernet do płytki i wolnego portu w routerze. Podłączamy kabel do gniazdka - powinny zaświecić się diody: `PWR` i `ACT` na Raspberry Pi i `PWR` na GrovePi. Jeśli tak, możemy przejść dalej.
 
@@ -137,7 +137,7 @@ grovepi.digitalWrite(2, val) - port D2, zapis 0-1
 grovepi.digitalWrite(3, val) - port D3, zapis 0-1
 grovepi.digitalWrite(4, val) - port D4, zapis 0-1
 grovepi.digitalWrite(5, val) - port D5, zapis 0-1
-grovepi.digitalWrite(6, val)	- port D6, zapis 0-1
+grovepi.digitalWrite(6, val) - port D6, zapis 0-1
 grovepi.digitalWrite(7, val) - port D7, zapis 0-1
 grovepi.digitalWrite(8, val) - port D8, zapis 0-1
 grovepi.digitalWrite(14, val) - port A0, zapis 0-1
